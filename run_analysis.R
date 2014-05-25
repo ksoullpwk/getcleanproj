@@ -23,14 +23,16 @@ write.table(data,file="tidydata.txt",sep=",")
 subjectsize <- length(table(subject))
 activitysize <- length(activity[[2]])
 columnsize <- length(X[1,])
-allMean <- matrix(NA, nrow=subjectsize*activitysize, ncol=columnsize+1,dimnames=)
+allMean <- matrix(NA, nrow=subjectsize*activitysize, ncol=columnsize)
 row <- 1
+rowLabel <- c()
 for(i in 1:subjectsize) {
     for(j in 1:activitysize) {
-        rownames(allMean(row)) <- paste(i,activity[j,2],sep=".")
+        rowLabel <- c(rowLabel,paste(i,activity[j,2],sep="."))
         allMean[row,1:columnsize] <- colMeans(data[data$subject==i & data$activity==activity[j,2],1:columnsize])
         row <- row+1
     }
 }
-names(allMean) <- features[grepl("mean\\(\\)",features[[2]]) | grepl("std\\(\\)",features[[2]]),2]
+rownames(allMean) <- rowLabel
+colnames(allMean) <- features[grepl("mean\\(\\)",features[[2]]) | grepl("std\\(\\)",features[[2]]),2]
 write.table(allMean,file="tidydata2.txt",sep=",")
